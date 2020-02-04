@@ -1,5 +1,44 @@
-const getTableData = (req, res, db) => {
-    db.select('*').from('testtable1')
+const getUser = (req, res, db) => {
+    db.select('*').from('users')
+      .then(items => {
+        if(items.length){
+          res.json(items)
+        } else {
+          res.json({dataExists: 'false'})
+        }
+      })
+      .catch(err => res.status(400).json({dbError: 'db error'}))
+}
+const postUser = (req, res, db) => {
+    const { email, username, password } = req.body
+    const added = new Date()
+    db('users').insert({email, username, password})
+      .returning('*')
+      .then(item => {
+        res.json(item)
+      })
+      .catch(err => res.status(400).json({dbError: 'db error'}))
+  }
+const putUser = (req, res, db) => {
+    const { email, username, password } = req.body
+    db('users').where({email}).update({email, username, password})
+      .returning('*')
+      .then(item => {
+        res.json(item)
+      })
+      .catch(err => res.status(400).json({dbError: 'db error'}))
+  }
+const deleteUser = (req, res, db) => {
+    const { email } = req.body
+    db('users').where({email}).del()
+      .then(() => {
+        res.json({delete: 'true'})
+      })
+      .catch(err => res.status(400).json({dbError: 'db error'}))
+  }
+
+const getSession = (req, res, db) => {
+    db.select('*').from('session-pool')
       .then(items => {
         if(items.length){
           res.json(items)
@@ -9,11 +48,10 @@ const getTableData = (req, res, db) => {
       })
       .catch(err => res.status(400).json({dbError: 'db error'}))
   }
-  
-  const postTableData = (req, res, db) => {
-    const { first, last, email, phone, location, hobby } = req.body
+const postSession = (req, res, db) => {
+    const { id, sessionid, token, sessionname } = req.body
     const added = new Date()
-    db('testtable1').insert({first, last, email, phone, location, hobby, added})
+    db('session-pool').insert({id, sessionid, token,sessionname})
       .returning('*')
       .then(item => {
         res.json(item)
@@ -21,9 +59,9 @@ const getTableData = (req, res, db) => {
       .catch(err => res.status(400).json({dbError: 'db error'}))
   }
   
-  const putTableData = (req, res, db) => {
-    const { id, first, last, email, phone, location, hobby } = req.body
-    db('testtable1').where({id}).update({first, last, email, phone, location, hobby})
+  const putSession = (req, res, db) => {
+    const { id, sessionid, token, sessionname  } = req.body
+    db('session-pool').where({id}).update({id, sessionid, token, sessionname })
       .returning('*')
       .then(item => {
         res.json(item)
@@ -31,18 +69,22 @@ const getTableData = (req, res, db) => {
       .catch(err => res.status(400).json({dbError: 'db error'}))
   }
   
-  const deleteTableData = (req, res, db) => {
+  const deleteSession = (req, res, db) => {
     const { id } = req.body
-    db('testtable1').where({id}).del()
+    db('session-pool').where({id}).del()
       .then(() => {
         res.json({delete: 'true'})
       })
       .catch(err => res.status(400).json({dbError: 'db error'}))
   }
-  
+
   module.exports = {
-    getTableData,
-    postTableData,
-    putTableData,
-    deleteTableData
+    getUser,
+    postUser,
+    putUser,
+    deleteUser,
+    getSession,
+    postSession,
+    putSession,
+    deleteSession
   }

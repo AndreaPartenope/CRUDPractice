@@ -25,7 +25,7 @@ var db = require('knex')({
     ssl: true,
   }
  });*/
- const main = require('./controllers/main')
+ const main = require('./controllers/main').default
 
 // App
 const app = express()
