@@ -10,22 +10,17 @@ const cors = require('cors')  // allows/disallows cross-site communication
 const morgan = require('morgan') // logs requests
 
 var db = require('knex')({
-    client: 'pg',
-    connection: {
-      host : 'rajje.db.elephantsql.com',
-      user : 'delbyfkx',
-      password : 'yK_NlDmMDkMXqc6_yNxYjknqG83ERXW',
-      database : 'delbyfkx'
-    }
-  });
-/*const db = require('knex')({
   client: 'pg',
-   connection: {
-     connectionString: process.env.url("postgres://delbyfkx:cyK_NlDmMDkMXqc6_yNxYjknqG83ERXW@rajje.db.elephantsql.com:5432/delbyfkx"),
-    ssl: true,
+  connection: {
+    host : 'rajje.db.elephantsql.com',
+    user : 'delbyfkx',
+    password : 'cyK_NlDmMDkMXqc6_yNxYjknqG83ERXW',
+    database : 'delbyfkx'
   }
- });*/
- const main = require('./controllers/main').default
+});
+
+// Controllers - aka, the db queries
+const main = require('./controllers/main')
 
 // App
 const app = express()
@@ -48,10 +43,14 @@ app.use(morgan('combined')) // use 'tiny' or 'combined'
 
 // App Routes - Auth
 app.get('/', (req, res) => res.send('hello world'))
-app.get('/crud', (req, res) => main.getTableData(req, res, db))
-app.post('/crud', (req, res) => main.postTableData(req, res, db))
-app.put('/crud', (req, res) => main.putTableData(req, res, db))
-app.delete('/crud', (req, res) => main.deleteTableData(req, res, db))
+app.get('/user', (req, res) => main.getUser(req, res, db))
+app.post('/user', (req, res) => main.postUser(req, res, db))
+app.put('/user', (req, res) => main.putUser(req, res, db))
+app.delete('/user', (req, res) => main.deleteUser(req, res, db))
+app.get('/session', (req, res) => main.getSession(req, res, db))
+app.post('/session', (req, res) => main.postSession(req, res, db))
+app.put('/session', (req, res) => main.putSession(req, res, db))
+app.delete('/session', (req, res) => main.deleteSession(req, res, db))
 
 // App Server Connection
 app.listen(process.env.PORT || 3000, () => {
