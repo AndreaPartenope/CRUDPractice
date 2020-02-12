@@ -12,10 +12,10 @@ const morgan = require('morgan') // logs requests
 var db = require('knex')({
   client: 'pg',
   connection: {
-    host : 'rajje.db.elephantsql.com',
-    user : 'delbyfkx',
-    password : 'cyK_NlDmMDkMXqc6_yNxYjknqG83ERXW',
-    database : 'delbyfkx'
+    host: 'rajje.db.elephantsql.com',
+    user: 'delbyfkx',
+    password: 'cyK_NlDmMDkMXqc6_yNxYjknqG83ERXW',
+    database: 'delbyfkx'
   }
 });
 
@@ -26,7 +26,7 @@ const main = require('./controllers/main')
 const app = express()
 
 // App Middleware
-const whitelist = ['http://localhost:3001']
+const whitelist = ['http://localhost:3000']
 const corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1 || !origin) {
@@ -44,6 +44,7 @@ app.use(morgan('combined')) // use 'tiny' or 'combined'
 // App Routes - Auth
 app.get('/', (req, res) => res.send('hello world'))
 app.get('/user', (req, res) => main.getUser(req, res, db))
+app.put('/email', (req,res) => main.getEmail(req,res,db))
 app.post('/user', (req, res) => main.postUser(req, res, db))
 app.put('/user', (req, res) => main.putUser(req, res, db))
 app.delete('/user', (req, res) => main.deleteUser(req, res, db))
@@ -53,6 +54,6 @@ app.put('/session', (req, res) => main.putSession(req, res, db))
 app.delete('/session', (req, res) => main.deleteSession(req, res, db))
 
 // App Server Connection
-app.listen(process.env.PORT || 3000, () => {
-  console.log(`app is running on port ${process.env.PORT || 3000}`)
+app.listen(process.env.PORT || 3030, () => {
+  console.log(`app is running on port ${process.env.PORT || 3030}`)
 })
