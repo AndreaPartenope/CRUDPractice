@@ -16,11 +16,16 @@ var db = require('knex')({
     database: 'delbyfkx'
   }
 });
+<<<<<<< HEAD
 // Controllers
 const main = require('./controllers/main')
 // App
 const app = express()
 // App Middleware
+=======
+const main = require('./controllers/main')
+const app = express()
+>>>>>>> 2a3e63fb6277e879fb5c3017f6fa6b446e3827f8
 const whitelist = ['http://localhost:3000']
 const corsOptions = {
   origin: function (origin, callback) {
@@ -38,7 +43,6 @@ app.use(morgan('combined'))
 
 app.get('/session', (req, res) => main.getSession(req, res, db))
 app.post('/session', (req, res) => main.postSession(req, res, db))
-app.put('/session', (req, res) => main.putSession(req, res, db))
 app.delete('/session', (req, res) => main.deleteSession(req, res, db))
 
 app.listen(process.env.PORT || 3030, () => {
