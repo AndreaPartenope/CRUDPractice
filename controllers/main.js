@@ -9,7 +9,6 @@ const getSession = (req, res, db) => {
     })
     .catch(err => res.status(400).json({ dbError: 'db error', err }))
 }
-
 const postSession = (req, res, db) => {
   const { id, sessionId, token, sessionName } = req.body
   const added = new Date()
