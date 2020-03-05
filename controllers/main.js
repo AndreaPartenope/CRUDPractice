@@ -9,18 +9,23 @@ const getSession = (req, res, db) => {
     })
     .catch(err => res.status(400).json({ dbError: 'db error', err }))
 }
+
 const postSession = (req, res, db) => {
   const { id, sessionId, token, sessionName } = req.body
   const added = new Date()
   db('session-pool').insert({ id, sessionId, token, sessionName })
-    .catch(err => res.status(400).json({ dbError: 'db error', err }))
+    .returning('*')
+    .then(item => {
+      res.json(item)
+    })
+    .catch(err => res.status(400).json({ dbError: 'db error',err }))
 }
 const deleteSession = (req, res, db) => {
   const { id } = req.body
   db('session-pool').where({ id }).del()
     .returning('*')
     .then(() => {
-      res.json({ delete: 'true' })
+      res.json({ id: id })
     })
     .catch(err => res.status(400).json({ dbError: 'db error', err }))
 }
