@@ -29,10 +29,7 @@ const putSession = (req, res, db) => {
     .then(item => {
       res.json(item)
     })
-=======
->>>>>>> 2a3e63fb6277e879fb5c3017f6fa6b446e3827f8
     .catch(err => res.status(400).json({ dbError: 'db error', err }))
->>>>>>> 6253beb1e8d0de79025dfdd29f3456938efe0014
 }
 const deleteSession = (req, res, db) => {
   const { id } = req.body
